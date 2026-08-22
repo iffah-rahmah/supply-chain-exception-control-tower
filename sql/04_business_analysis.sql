@@ -1,8 +1,20 @@
 -- Supply Chain Control Tower: Business Analysis
+--
+-- Main business question:
+-- How can operational data be used to identify, prioritize, and manage
+-- shipment exceptions to minimize their impact on service performance?
+--
+-- Supporting business questions:
+-- 1. What types of shipment exceptions occur most frequently?
+-- 2. Where are exceptions concentrated?
+-- 3. Which exceptions should operations prioritize?
+-- 4. What operational patterns are associated with shipment exceptions?
+-- 5. What actions could operations take based on the findings?
 
 USE supply_chain_control_tower;
 
 
+-- Main business question: overall service and exception workload
 -- 1. Overall delivery KPIs
 -- Shows the size of the order and exception workload.
 SELECT
@@ -45,8 +57,10 @@ SELECT
 FROM orders_clean;
 
 
+-- Supporting question 1: What exception types occur most frequently?
 -- 2. Delivery-status distribution
--- Shows which delivery outcomes occur most frequently.
+-- Late delivery and shipping canceled are the exception outcomes.
+-- The other statuses provide comparison with non-exception orders.
 SELECT
     delivery_status,
     COUNT(*) AS order_count,
@@ -59,6 +73,7 @@ GROUP BY delivery_status
 ORDER BY order_count DESC;
 
 
+-- Supporting question 3: Which exceptions should operations prioritize?
 -- 3. Late-delivery severity
 -- Canceled shipments are excluded because delay days do not represent
 -- a completed delivery outcome for those orders.
@@ -79,6 +94,8 @@ GROUP BY delay_days
 ORDER BY delay_days;
 
 
+-- Supporting question 4: What operational patterns are associated
+-- with shipment exceptions?
 -- 4. Delivery performance by shipping mode
 -- Counts show workload, while rates allow a fairer comparison.
 SELECT
@@ -124,6 +141,7 @@ GROUP BY shipping_mode
 ORDER BY exception_rate_pct DESC;
 
 
+-- Supporting question 2: Where are exceptions concentrated?
 -- 5. Delivery performance by market
 -- Compares broad destination markets of different sizes.
 SELECT
@@ -160,6 +178,7 @@ GROUP BY market
 ORDER BY exception_rate_pct DESC;
 
 
+-- Supporting question 2: Where are exceptions concentrated?
 -- 6. Regions with the highest exception rates
 -- The order count is included so the rate is not viewed without context.
 SELECT
@@ -175,6 +194,8 @@ GROUP BY order_region
 ORDER BY exception_rate_pct DESC, total_orders DESC;
 
 
+-- Supporting question 4: What operational patterns are associated
+-- with shipment exceptions?
 -- 7. Monthly delivery-exception trend
 SELECT
     order_year_month,
@@ -189,6 +210,8 @@ GROUP BY order_year_month
 ORDER BY order_year_month;
 
 
+-- Supporting question 4: What operational patterns are associated
+-- with shipment exceptions?
 -- 8. Relationship between order status and delivery exceptions
 -- This helps identify upstream order issues linked to canceled shipments.
 SELECT
@@ -216,6 +239,7 @@ GROUP BY order_status
 ORDER BY exception_rate_pct DESC, total_orders DESC;
 
 
+-- Supporting question 3: Which exceptions should operations prioritize?
 -- 9. Priority summary
 -- Priority rules:
 -- High: canceled or at least 3 days late
@@ -252,6 +276,7 @@ ORDER BY
     END;
 
 
+-- Supporting question 3: Which exceptions should operations prioritize?
 -- 10. High-priority exception queue
 -- Canceled shipments are listed first, followed by the longest delays
 -- and highest-value orders.
@@ -285,3 +310,7 @@ ORDER BY
     END DESC,
     order_value DESC
 LIMIT 50;
+
+
+-- Supporting question 5 is answered after interpreting the query results.
+-- The operational recommendations are not calculated directly by SQL.
