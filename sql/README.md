@@ -5,8 +5,9 @@ MySQL and MySQL Workbench are used for the SQL analysis.
 ## Files
 
 - `01_create_database.sql`: creates the database and the `orders_clean` table.
-- `01_validate_database.sql`: validates the data after the CSV import.
-- `02_business_analysis.sql`: answers the main operational business questions.
+- `02_import_clean_data.sql`: loads the cleaned order-level CSV into MySQL.
+- `03_validate_database.sql`: validates the data after the CSV import.
+- `04_business_analysis.sql`: answers the main operational business questions.
 - `data/processed/dataco_orders_clean.csv`: cleaned dataset created in Notebook 2 and excluded from GitHub.
 
 ## Step 1: Create the database and table
@@ -20,19 +21,27 @@ MySQL and MySQL Workbench are used for the SQL analysis.
 
 ## Step 2: Import the cleaned CSV
 
-1. In the Schemas panel, expand `supply_chain_control_tower`.
-2. Right-click `orders_clean`.
-3. Select **Table Data Import Wizard**.
-4. Choose `data/processed/dataco_orders_clean.csv`.
-5. Select **Use existing table** and choose `orders_clean`.
-6. Confirm that the CSV columns map to columns with the same names.
-7. Complete the import.
+1. Open `sql/02_import_clean_data.sql` in MySQL Workbench.
+2. Replace `/full/path/to/dataco_orders_clean.csv` with the full path to the cleaned CSV on your computer.
+3. Run the script after confirming that `orders_clean` is empty.
+4. Confirm that `imported_orders` returns `65,752`.
 
 The CSV contains 65,752 order-level rows and 31 columns.
 
+`LOAD DATA LOCAL INFILE` must be enabled for the MySQL client and server. If MySQL returns Error 3948 because local file loading is disabled, use MySQL Workbench's **Table Data Import Wizard**:
+
+1. In the Schemas panel, expand `supply_chain_control_tower`.
+2. Right-click `orders_clean` and select **Table Data Import Wizard**.
+3. Choose `data/processed/dataco_orders_clean.csv`.
+4. Select **Use existing table** and choose `orders_clean`.
+5. Confirm that the CSV columns map to columns with the same names.
+6. Complete the import.
+
+During development, local file loading was disabled in the project environment. The cleaned CSV was therefore loaded into the same table in smaller `INSERT` batches. The final validation confirmed that all 65,752 orders were present with no duplicate Order IDs.
+
 ## Step 3: Validate the import
 
-1. Open `sql/01_validate_database.sql` in MySQL Workbench.
+1. Open `sql/03_validate_database.sql` in MySQL Workbench.
 2. Run the complete script.
 3. Confirm the expected results:
 
@@ -56,8 +65,8 @@ Shipping canceled: 2,855
 
 The cleaned CSV is not uploaded to GitHub. To reproduce the project, download the original DataCo dataset and run the cleaning notebook first.
 
-## Run the business analysis
+## Step 4: Run the business analysis
 
-After the import validation is complete, open `sql/02_business_analysis.sql` in MySQL Workbench and run the queries one section at a time.
+After the import validation is complete, open `sql/04_business_analysis.sql` in MySQL Workbench and run the queries one section at a time.
 
 The file covers overall KPIs, delivery status, delay severity, shipping mode, market, region, monthly trends, order status, and exception priority.
