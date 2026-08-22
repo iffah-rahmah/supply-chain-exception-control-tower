@@ -37,7 +37,19 @@ The CSV contains 65,752 order-level rows and 31 columns.
 5. Confirm that the CSV columns map to columns with the same names.
 6. Complete the import.
 
-During development, local file loading was disabled in the project environment. The cleaned CSV was therefore loaded into the same table in smaller `INSERT` batches. The final validation confirmed that all 65,752 orders were present with no duplicate Order IDs.
+### Batch-import fallback used in this project
+
+During development, local file loading was disabled in the project environment. The cleaned CSV was therefore loaded into the same table in smaller `INSERT` batches.
+
+The batch-generation code is saved in `scripts/create_mysql_import_batches.py`. It provides a reproducible record of how the fallback import was created without uploading 51 MB of generated SQL files to GitHub.
+
+1. Run `python3 scripts/create_mysql_import_batches.py` from the project folder.
+2. The script creates 14 files inside `data/processed/mysql_import_batches`.
+3. Open and run `chunk_01.sql` through `chunk_14.sql` in numerical order in MySQL Workbench.
+4. Each file adds up to 5,000 orders to the same `orders_clean` table.
+5. Run `03_validate_database.sql` after the final batch.
+
+The generated batch files are excluded from GitHub because they repeat the cleaned CSV data. The generator remains in the repository so the method can be inspected and reproduced. Final validation confirmed that all 65,752 orders were present with no duplicate Order IDs.
 
 ## Step 3: Validate the import
 
