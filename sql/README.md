@@ -6,6 +6,7 @@ MySQL and MySQL Workbench are used for the SQL analysis.
 
 - `01_create_database.sql`: creates the database and the `orders_clean` table.
 - `01_validate_database.sql`: validates the data after the CSV import.
+- `02_business_analysis.sql`: answers the main operational business questions.
 - `data/processed/dataco_orders_clean.csv`: cleaned dataset created in Notebook 2 and excluded from GitHub.
 
 ## Step 1: Create the database and table
@@ -54,3 +55,9 @@ Shipping canceled: 2,855
 ## Important
 
 The cleaned CSV is not uploaded to GitHub. To reproduce the project, download the original DataCo dataset and run the cleaning notebook first.
+
+## Run the business analysis
+
+After the import validation is complete, open `sql/02_business_analysis.sql` in MySQL Workbench and run the queries one section at a time.
+
+The file covers overall KPIs, delivery status, delay severity, shipping mode, market, region, monthly trends, order status, and exception priority.
