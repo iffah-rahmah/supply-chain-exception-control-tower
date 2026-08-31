@@ -179,5 +179,4 @@ The batch-generation script is only required when direct CSV import is blocked. 
 ## Author
 
 **Iffah Nurahmah**
-
-Final Project — Data Analytics Bootcamp
+Data Analytics Bootcamp - Ironhack
