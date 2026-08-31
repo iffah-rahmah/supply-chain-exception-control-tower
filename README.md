@@ -80,6 +80,7 @@ The Tableau workbook contains:
 - Recommended operational actions and a priority action queue
 
 Open or download the packaged workbook: [Supply Chain Exception Control Tower](tableau/supply_chain_exception_control_tower.twbx)
+https://public.tableau.com/app/profile/iffah.nurahmah/viz/supply_chain_exception_control_tower_story_v5/ControlTowerStory
 
 ## Priority Framework
 
